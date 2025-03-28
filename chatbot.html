@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeByte - AI Programming Assistant</title>
+    <link rel="stylesheet" href="chatbot.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div id="particles-js" class="particles-container"></div>
+    
+    <header>
+        <div class="logo">CodeByte<span class="blink">_</span></div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Chat</a></li>
+                <li><a href="#">Docs</a></li>
+                <li><a href="#">Examples</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="theme-toggle" title="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="clear-chat" title="Clear chat history" class="clear-chat-btn">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+    
+    <main>
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <h2>CodeByte Assistant</h2>
+                    <p>Powered by AI</p>
+                </div>
+                <div class="chat-actions">
+                    <button id="chatbot-button" title="Ask CodeByte" class="action-button">
+                        <i class="fas fa-robot"></i> Ask CodeByte
+                    </button>
+                    <button id="clear-chat-mobile" title="Clear chat history" class="action-button">
+                        <i class="fas fa-trash-alt"></i> Clear History
+                    </button>
+                </div>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            Hello! I'm CodeByte, your programming assistant with visual generation capabilities. Ask me any programming question or request an AI-generated image or video to help explain concepts! 👨‍💻
+                        </div>
+                        <div class="message-time">Now</div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <textarea id="user-input" placeholder="Ask a question or request an image/video..." rows="1"></textarea>
+                <div class="input-actions">
+                    <button id="media-button" title="Generate image or video">
+                        <i class="fas fa-photo-video"></i>
+                    </button>
+                    <button id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="suggestion-chips">
+                <div class="suggestion-chip">How to use arrays in JavaScript?</div>
+                <div class="suggestion-chip">Explain Python decorators</div>
+                <div class="suggestion-chip">CSS Grid vs Flexbox</div>
+                <div class="suggestion-chip">Generate an image of code architecture</div>
+            </div>
+            <div class="roadmap-form">
+                <h3>Get Your Roadmap</h3>
+                <form id="roadmap-form">
+                    <label for="experience">Experience Level:</label>
+                    <input type="text" id="experience" name="experience" placeholder="e.g., Beginner, Intermediate">
+
+                    <label for="domains">Domains of Interest:</label>
+                    <input type="text" id="domains" name="domains" placeholder="e.g., Web Development, AI">
+
+                    <button type="submit" class="action-button">Get Suggestions</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Media Generation Modal -->
+        <div id="media-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Generate Media</h3>
+                    <button id="close-media-modal" class="close-button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="image">Image</button>
+                            <button class="tab-btn" data-tab="video">Video</button>
+                        </div>
+                        <div class="tab-content">
+                            <div id="image-tab" class="tab-pane active">
+                                <div class="form-group">
+                                    <label for="image-prompt">Describe the image</label>
+                                    <textarea id="image-prompt" placeholder="A software architecture diagram showing microservices..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="image-style">Style</label>
+                                    <select id="image-style">
+                                        <option value="realistic">Realistic</option>
+                                        <option value="cartoon">Cartoon</option>
+                                        <option value="sketch">Sketch</option>
+                                        <option value="diagram">Technical Diagram</option>
+                                    </select>
+                                </div>
+                                <button id="generate-image-btn" class="generate-btn">Generate Image</button>
+                            </div>
+                            <div id="video-tab" class="tab-pane">
+                                <div class="form-group">
+                                    <label for="video-prompt">Video script</label>
+                                    <textarea id="video-prompt" placeholder="Create a video explaining how binary search works..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="video-avatar">Avatar</label>
+                                    <select id="video-avatar">
+                                        <option value="alex">Alex (Male)</option>
+                                        <option value="maya">Maya (Female)</option>
+                                        <option value="tech">Tech Bot</option>
+                                    </select>
+                                </div>
+                                <button id="generate-video-btn" class="generate-btn">Generate Video</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Preview Modal -->
+        <div id="code-preview" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Code Preview</h3>
+                    <div class="modal-actions">
+                        <button id="copy-code">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button id="close-preview" class="close-button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <pre><code id="code-content"></code></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
